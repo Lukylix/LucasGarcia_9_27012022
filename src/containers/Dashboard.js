@@ -141,8 +141,10 @@ export default class {
 			this.counter++;
 		}
 
+		const status = getStatus(index);
 		bills.forEach((bill) => {
-			$(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills));
+			// Prevent double event listener on same bill
+			if (bill.status === status) $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills));
 		});
 
 		return bills;
