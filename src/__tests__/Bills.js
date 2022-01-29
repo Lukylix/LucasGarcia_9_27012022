@@ -9,6 +9,7 @@ import { localStorageMock } from "../__mocks__/localStorage.js";
 import { ROUTES_PATH } from "../constants/routes";
 import Router from "../app/Router.js";
 import Bills from "../containers/Bills.js";
+import store from "../__mocks__/store";
 
 describe("Given I am connected as an employee", () => {
 	describe("When I am on Bills Page", () => {
@@ -77,6 +78,30 @@ describe("Given I am connected as an employee", () => {
 				expect(modal.innerHTML).toContain("Justificatif");
 				expect(modalImg.src).toContain(encodeURI(imgUrl));
 			});
+		});
+
+		// GET Bills
+		test("Then fetches bills from mock API GET", async () => {
+			const getSpy = jest.spyOn(store, "get");
+			const bills = await store.get();
+			expect(getSpy).toHaveBeenCalledTimes(1);
+			expect(bills.data.length).toBe(4);
+		});
+		test("Then fetches bills from an API and fails with 404 message error", async () => {
+			// Next line utility no found in that case. I keep it for code coherance with the other test (Dashboard)
+			store.get.mockImplementationOnce(() => Promise.reject(new Error("Erreur 404")));
+			const html = BillsUI({ error: "Erreur 404" });
+			document.body.innerHTML = html;
+			const message = await screen.getByText(/Erreur 404/);
+			expect(message).toBeTruthy();
+		});
+		test("Then fetches messages from an API and fails with 500 message error", async () => {
+			// Next line utility no found in that case. I keep it for code coherance with the other test (Dashboard)
+			store.get.mockImplementationOnce(() => Promise.reject(new Error("Erreur 500")));
+			const html = BillsUI({ error: "Erreur 500" });
+			document.body.innerHTML = html;
+			const message = await screen.getByText(/Erreur 500/);
+			expect(message).toBeTruthy();
 		});
 	});
 });
