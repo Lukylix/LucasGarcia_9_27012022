@@ -29,7 +29,7 @@ export default class {
 			.html(
 				`<div style='text-align: center;' class="bill-proof-container"><img width=${imgWidth} src=${billUrl} /></div>`
 			);
-		$("#modaleFile").modal("show");
+		if (typeof $("#modaleFile").modal === "function") $("#modaleFile").modal("show");
 	};
 
 	// not need to cover this function by tests
