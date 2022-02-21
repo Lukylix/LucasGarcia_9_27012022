@@ -1,4 +1,15 @@
 export default {
+	post: () => {
+		return Promise.resolve({
+			createdAt: "2022-02-17T16:32:16.396Z",
+			email: "employee@test.tld",
+			fileName: "bill.png",
+			filePath: "public/52f8ea14d924a2970dbf883caf1265d4",
+			id: 14,
+			key: "cw4CsrgLU9WtqSoXExaUur",
+			updatedAt: "2022-02-17T16:32:16.396Z",
+		});
+	},
 	get: () => {
 		return Promise.resolve({
 			data: [

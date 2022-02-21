@@ -2,11 +2,12 @@
  * @jest-environment jsdom
  */
 
-import { fireEvent, screen } from "@testing-library/dom";
+import { screen } from "@testing-library/dom";
 import NewBillUI from "../views/NewBillUI.js";
 import NewBill from "../containers/NewBill.js";
 import { localStorageMock } from "../__mocks__/localStorage.js";
 import fakeStore from "../__mocks__/fakeStore.js";
+import store from "../__mocks__/store";
 import { ROUTES_PATH } from "../constants/routes";
 
 describe("Given I am connected as an employee", () => {
@@ -109,5 +110,14 @@ describe("Given I am connected as an employee", () => {
 				expect(onNavigate).toHaveBeenCalledWith(ROUTES_PATH["Bills"]);
 			});
 		});
+
+		// POST new bill
+		test("Then fetches file from mock API POST", async () => {
+			const postSpy = jest.spyOn(store, "post");
+			const file = await store.post();
+			expect(postSpy).toHaveBeenCalledTimes(1);
+			expect(Object.keys(file).length).toBe(7);
+		});
+		// No more test on POST errors because newBillUI does not have error display
 	});
 });
