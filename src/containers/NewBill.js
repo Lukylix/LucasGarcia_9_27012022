@@ -23,7 +23,7 @@ export default class NewBill {
 		const splitFileName = fileName.split(".");
 		const fileExtension = splitFileName[splitFileName.length - 1];
 		const dicValidExtensions = {
-			png: true,
+			jpg: true,
 			jpeg: true,
 			png: true,
 		};
