@@ -20,6 +20,7 @@ const row = (bill) => {
 };
 
 const rows = (data) => {
+	if (data && data.length) data.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
 	return data && data.length ? data.map((bill) => row(bill)).join("") : "";
 };
 
