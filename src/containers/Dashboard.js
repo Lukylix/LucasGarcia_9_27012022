@@ -14,7 +14,7 @@ export const filteredBills = (data, status) => {
 				if (typeof jest !== "undefined") {
 					selectCondition = bill.status === status;
 				} else {
-				/* istanbul ignore next */
+					/* istanbul ignore next */
 					// in prod environment
 					const userEmail = JSON.parse(localStorage.getItem("user")).email;
 					selectCondition = bill.status === status && ![...USERS_TEST, userEmail].includes(bill.email);
@@ -141,8 +141,10 @@ export default class {
 			this.counter++;
 		}
 
+		const status = getStatus(index);
 		bills.forEach((bill) => {
-			$(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills));
+			// Prevent double event listener on same bill
+			if (bill.status === status) $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills));
 		});
 
 		return bills;
