@@ -119,5 +119,23 @@ describe("Given I am connected as an employee", () => {
 				expect(newBill.onNavigate).toHaveBeenCalledWith(ROUTES_PATH.Bills);
 			});
 		});
+		// test d'intégration POST
+		describe("When file is valid", () => {
+			test("Then fetches file from mock API POST", async () => {
+				const newBill = new NewBill({
+					document,
+					onNavigate, // window.onNavigate
+					store: mockStore,
+					localStorage, // window.localStorage
+				});
+				const event = { preventDefault: () => {}, target: { value: "test.png" } };
+				newBill.handleChangeFile(event);
+
+				const { fileUrl, key } = await mockStore.bills().create();
+				expect(newBill.billId).toBe(key);
+				expect(newBill.fileUrl).toBe(fileUrl);
+			});
+		});
+		// No more test on POST errors because newBillUI doesn't have an error display
 	});
 });
