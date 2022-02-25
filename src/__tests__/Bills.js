@@ -71,5 +71,44 @@ describe("Given I am connected as an employee", () => {
 				expect(modalImg.src).toContain(encodeURI(imgUrl));
 			});
 		});
+
+		// test d'intégration GET
+		test("Then fetches bills from mock API GET", async () => {
+			window.onNavigate(ROUTES_PATH.Bills);
+			await new Promise(process.nextTick);
+			const tBody = screen.getByTestId("tbody");
+			const rowBills = tBody.querySelectorAll("tr");
+			expect(rowBills.length).toBe((await mockStore.bills().list()).length);
+		});
+		describe("When an error occurs on API", () => {
+			test("Then fetches bills from an API and fails with 404 message error", async () => {
+				jest.spyOn(mockStore, "bills");
+				mockStore.bills.mockImplementationOnce(() => {
+					return {
+						list: () => {
+							return Promise.reject(new Error("Erreur 404"));
+						},
+					};
+				});
+				window.onNavigate(ROUTES_PATH.Bills);
+				await new Promise(process.nextTick);
+				const message = await screen.getByText(/Erreur 404/);
+				expect(message).toBeTruthy();
+			});
+			test("Then fetches bills from an API and fails with 500 message error", async () => {
+				jest.spyOn(mockStore, "bills");
+				mockStore.bills.mockImplementationOnce(() => {
+					return {
+						list: () => {
+							return Promise.reject(new Error("Erreur 500"));
+						},
+					};
+				});
+				window.onNavigate(ROUTES_PATH.Bills);
+				await new Promise(process.nextTick);
+				const message = await screen.getByText(/Erreur 500/);
+				expect(message).toBeTruthy();
+			});
+		});
 	});
 });
